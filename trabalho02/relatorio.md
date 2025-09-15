@@ -1,7 +1,7 @@
 # Tentativa 1 - Funkpop Júlio
 
 ## Etapa 1 - Coleta das Imagens e Preparação
-ambiente: LSC Unicamp de fundo, Funkopop do Júlio Avelar  
+ambiente: LSC Unicamp de fundo, em cima de uma escrivaninha, Funkopop do Júlio Avelar  
 dispositivo: Xiaomi Redmi Note 13 Pro 5g  
 num fotos: 108  
 EXIF: irrelevante  
@@ -42,3 +42,14 @@ O uso do COLMAP tirou bastante nosso controle sobre vários aspectos do resultad
 A forma como as fotos foram tiradas causaram um impacto forte na qualidade das mesmas, além do ambiente em que foram feitas. Houve muito ruido na hora de visualizar a imagem no Open3D devido a objetos não relacionados no ambiente ao redor, como carregador de notebook, folha de papel, monitor, etc. Para próximas coletas, seria ideal um ambiente mais limpo, com acessibilidade 360 graus para facilitar tirar as fotos das costas e não ocasionar problemas de uma parte da imagem ser perdida devido à descarte de fotos de má qualidade.
 
 Tirar melhor as fotos, basicamente.
+
+# Tentativa 2 - Astronauta sem textura
+
+## Etapa 1 - Coleta das Imagens e Preparação
+ambiente: LSC Unicamp de fundo, em cima de uma mesa circular vazia, Astronauta sem textura do Júlio Avelar feito em impressora 3D  
+dispositivo: Xiaomi Redmi Note 13 Pro 5g  
+num fotos: 121  
+EXIF: irrelevante  
+Estratégia captura: Força bruta com considerações em relação às falhas da tentativa anterior. Figura colocada em mesa circular acessível por todos os lados para facilitar fotos de todos os pontos de vista, fotos tiradas em ordem e com bastante sobreposição para melhor organização, objetos irrelevantes para o panorama foram retirados das redondezas para não causarem ruídos.
+
+Desafios: Angulação consistente. Mesmo com mais acessibilidade ao redor da figura, ainda é difícil manter a distância da câmera e a angulação consistentes entre fotos adjacentes. Além disso, foi escolhido, propositalmente, uma figura monocromática branca para avaliar o quanto de um impacto isso têm no resultado final.
