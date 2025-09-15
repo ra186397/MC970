@@ -40,7 +40,7 @@ def rename_files_in_folder(folder_path, new_prefix="file_", start_index=1):
 
 if __name__ == "__main__":
     # Specify the folder path where the files are located
-    target_folder = "/home/giovani-bianchini/Documents/Disciplinas/MC970/trabalho02/imagens"  # Replace with your actual folder path
+    target_folder = "/home/giovani-bianchini/Documents/Disciplinas/MC970/trabalho02/img_tentativa2"  # Replace with your actual folder path
 
     # Call the function to rename the files
     rename_files_in_folder(target_folder, new_prefix="img", start_index=1)
