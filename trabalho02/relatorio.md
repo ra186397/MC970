@@ -28,7 +28,7 @@ Utilizamos RANSAC para F/E e recuperamos as poses da câmera na figura 1 com tri
 Executamos SfM via COLMAP
 Executamos MVS
 não geramos malha e texturização
-# REALIZAR LIMPEZA DOS PONTOS SUJOS!
+Utilizamos MeshLab para remoção de pontos sujos
 
 
 Desafios enfrentados:
@@ -53,3 +53,32 @@ EXIF: irrelevante
 Estratégia captura: Força bruta com considerações em relação às falhas da tentativa anterior. Figura colocada em mesa circular acessível por todos os lados para facilitar fotos de todos os pontos de vista, fotos tiradas em ordem e com bastante sobreposição para melhor organização, objetos irrelevantes para o panorama foram retirados das redondezas para não causarem ruídos.
 
 Desafios: Angulação consistente. Mesmo com mais acessibilidade ao redor da figura, ainda é difícil manter a distância da câmera e a angulação consistentes entre fotos adjacentes. Além disso, foi escolhido, propositalmente, uma figura monocromática branca para avaliar o quanto de um impacto isso têm no resultado final.
+
+## Etapas 2 e 3 - Detecção e Emparelhamento de características
+Utilizamos SIFT e ORB - Comparação entre duas imagens (img7 e img20)
+Features extraídas com SIFT: 809 e 203 features
+Features extraídas com ORB: 2654 e 381 features
+Matches obtidos com SIFT: 19 matches bons
+Matches obtidos com ORB: 28 matches bons
+Escolhemos SIFT por ser mais fácil de utilizar devido a ter mais ferramentas que o suportam e por ter visualmente matches melhores nas fotos resultantes.
+[Foto das features do SIFT e ORB, foto dos matches SIFT e ORB]
+
+Para emparelhamento, utilizamos FLANN e o ratio test de Lowe para filtragem
+
+Utilizamos RANSAC para F/E e recuperamos as poses da câmera na figura 1 com triangulação já feita.
+[Foto das poses da câmera, quadrado com pointinhos.]
+
+# Etapa 4 - Reconstrução 3D e Densificação
+
+Executamos SfM via COLMAP
+Executamos MVS
+não geramos malha e texturização
+Utilizamos MeshLab para remoção de pontos sujos
+
+
+Desafios enfrentados:
+
+## Perguntas:
+
+- Precisa das imagens de reconstrução 3D dos pontos das câmeras? Para todas as imagens ou só para algumas de exemplo?
+
