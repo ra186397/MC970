@@ -1,0 +1,20 @@
+graph TD
+    A[Câmera Peitoral] --> B{Pipeline de Processamento};
+    B --> C[1. Percepção Visual];
+    C --> D[Detecção/Segmentação de Objetos];
+    D -- Bounding Box/Máscara --> F;
+    D -- Classe do Objeto --> G;
+    B --> E[2. Estimativa de Profundidade];
+    E -- Mapa de Profundidade --> F;
+    F{3. Lógica de Distância e Risco};
+    F -- Distância do Objeto --> G;
+    F -- Alerta de Colisão --> G;
+    G[4. Narração e UX];
+    G -- Mensagem de Voz (PT-BR) --> H[Saída de Áudio];
+
+    subgraph "Componentes do Sistema"
+        C
+        E
+        F
+        G
+    end
