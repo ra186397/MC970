@@ -49,7 +49,7 @@ def get_distance_in_meters(depth_map, bbox):
         distance = float("inf")
 
     # Debug output
-    print(f"[DEBUG] Disparity: {median_disparity:.2f}, Distance: {distance:.2f}m")
+    # print(f"[DEBUG] Disparity: {median_disparity:.2f}, Distance: {distance:.2f}m")
 
     # Categorize distance
     for name, (min_d, max_d) in PROXIMITY_RANGES.items():
@@ -122,3 +122,99 @@ def check_collision_risk(distance_meters):
     if distance_meters < PROXIMITY_RANGES["próximo"][1]:  # < 2.0 metros
         return True
     return False
+
+
+# ... (keep all existing functions like get_distance_in_meters, etc.)
+
+# --- NEW FUNCTIONS FOR DIRECTIONAL GUIDANCE ---
+
+
+def analyze_zones(detections, depth_map, frame_width, distance_threshold):
+    """
+    Analyzes three vertical zones (Left, Center, Right) to find the
+    closest obstacle in each.
+
+    Returns: (dist_left, dist_center, dist_right)
+    """
+    # Define zone boundaries
+    left_zone_end = frame_width / 3
+    right_zone_start = 2 * frame_width / 3
+
+    # Initialize minimum distances for each zone to infinity
+    min_distances = {
+        "left": float("inf"),
+        "center": float("inf"),
+        "right": float("inf"),
+    }
+
+    if not detections:
+        return min_distances["left"], min_distances["center"], min_distances["right"]
+
+    for det in detections:
+        # Get the distance to this object
+        distance_m, _ = get_distance_in_meters(depth_map, det["bbox"])
+
+        # Skip objects that are too far away to matter
+        if distance_m > distance_threshold:
+            continue
+
+        # Find the center of the object
+        x_center = (det["bbox"][0] + det["bbox"][2]) / 2
+
+        # Check which zone the object is in and update min distance
+        if x_center < left_zone_end:
+            if distance_m < min_distances["left"]:
+                min_distances["left"] = distance_m
+        elif x_center > right_zone_start:
+            if distance_m < min_distances["right"]:
+                min_distances["right"] = distance_m
+        else:
+            if distance_m < min_distances["center"]:
+                min_distances["center"] = distance_m
+
+    return min_distances["left"], min_distances["center"], min_distances["right"]
+
+
+def get_navigation_advice(dist_left, dist_center, dist_right):
+    """
+    Generates a navigation command based on the closest objects in each zone.
+    This logic runs AFTER the critical "Stop" check.
+    """
+
+    # We use the "medium" range as our warning threshold
+    # From PROXIMITY_RANGES: "médio" starts at 2.0m, "longe" starts at 5.0m
+    warning_threshold = PROXIMITY_RANGES["longe"][0]  # 5.0 meters
+    safe_threshold = PROXIMITY_RANGES["próximo"][1]  # 2.0 meters
+
+    # Check for obstacles in the "medium" range
+    is_center_warn = dist_center < warning_threshold
+    is_left_clear = dist_left > warning_threshold
+    is_right_clear = dist_right > warning_threshold
+
+    # --- MODIFIED: Decision Logic with shorter phrases ---
+
+    # 1. Obstacle is in the center warning path
+    if is_center_warn:
+        if is_left_clear and is_right_clear:
+            # Both sides are clear
+            return "Obstáculo. Desvie."
+        elif is_left_clear:
+            # Only left is clear
+            return "Obstáculo. Siga esquerda."
+        elif is_right_clear:
+            # Only right is clear
+            return "Obstáculo. Siga direita."
+        else:
+            # All paths have medium-range obstacles
+            return "Múltiplos obstáculos. Cuidado."
+
+    # 2. Center is clear, but a side is blocked (less critical, but good to know)
+    if not is_left_clear and (dist_left < dist_center):
+        return "Obstáculo à esquerda."
+
+    if not is_right_clear and (dist_right < dist_center):
+        return "Obstáculo à direita."
+
+    # 3. All paths seem clear
+    # We return None to avoid spamming "Caminho livre"
+    return None

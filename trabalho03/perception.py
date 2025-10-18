@@ -3,7 +3,7 @@ import cv2
 
 
 class ObjectDetector:
-    def __init__(self, model_name="yolov8x.pt", confidence_threshold=0.5):
+    def __init__(self, model_name="yolov8n.pt", confidence_threshold=0.5):
         """
         Initializes the YOLOv8 object detector using the ultralytics library.
 
@@ -18,20 +18,26 @@ class ObjectDetector:
         self.confidence_threshold = confidence_threshold
 
         # You can get the class names directly from the model
+        # --- MODIFIED: Expanded class list ---
+        # NOTE: "gate" is not a standard COCO class.
+        # Added other common obstacles instead.
         self.target_class_names = [
             "person",
             "car",
             "motorcycle",
-            "bicycle",  # Added
+            "bicycle",
             "bus",
             "truck",
+            "train",  # <-- Added
             "traffic light",
             "stop sign",
-            "fire hydrant",  # Added - good for navigation
+            "fire hydrant",
+            "parking meter",  # <-- Added (common sidewalk obstacle)
             "bench",
             "backpack",
-            "umbrella",
+            "handbag",  # <-- Added
             "suitcase",
+            "skateboard",  # <-- Added
             "bottle",
             "cup",
             "chair",
@@ -40,11 +46,13 @@ class ObjectDetector:
             "laptop",
             "book",
             "clock",
-            "dog",  # Added - important for blind navigation
-            "cat",  # Added
-            "potted plant",  # Added - obstacle
-            "couch",  # Added
+            "vase",  # <-- Added
+            "dog",
+            "cat",
+            "potted plant",
+            "couch",
         ]
+        # -------------------------------------
 
     def detect(self, frame, conf_threshold=None):
         """
